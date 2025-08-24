@@ -19,9 +19,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useSignup } from "../../hooks/useSignup";
+import { useSignup } from "../../api/useSignup";
 import { toast } from "sonner";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -145,12 +145,12 @@ const SignupPage = () => {
               </Button>
               <div className="text-center mt-4">
                 <span className="text-slate-400">Already have an account?</span>
-                <a
-                  href="/login"
+                <Link
+                  to="/login"
                   className="ml-2 text-blue-400 hover:text-blue-500 underline transition-all duration-150"
                 >
                   Login
-                </a>
+                </Link>
               </div>
             </form>
           </Form>
