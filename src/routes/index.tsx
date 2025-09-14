@@ -1,13 +1,12 @@
-import LoginPage from "@/features/auth/pages/LoginPage";
-import SignupPage from "../features/auth/pages/SignupPage";
+// no public routes here; only protected routes
 
 export const routes = [
   {
-    path: "/sign-up",
-    element: <SignupPage />,
+    path: "/",
+    element: <div>Dashboard</div>,
   },
   {
-    path: "/login",
-    element: <LoginPage />,
+    path: "/settings",
+    element: <div>Settings</div>,
   },
 ];

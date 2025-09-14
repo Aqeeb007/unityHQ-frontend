@@ -19,9 +19,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { useLogin } from "../../api/useLogin";
+import { useAuth } from "@/context/auth-context";
 
 const formSchema = z.object({
   email: z.string().min(2).max(50),
@@ -29,8 +29,10 @@ const formSchema = z.object({
 });
 
 const LoginPage = () => {
-  const { mutate, isPending } = useLogin();
+  const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const from = (location.state as any)?.from?.pathname || "/dashboard";
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -41,17 +43,15 @@ const LoginPage = () => {
   });
 
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    mutate(values, {
-      onSuccess: () => {
-        toast.success("Login successful!");
-        form.reset();
-        navigate("/dashboard");
-      },
-      onError: () => {
-        toast.error("Login failed. Please try again.");
-      },
-    });
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      await login(values);
+      toast.success("Login successful!");
+      form.reset();
+      navigate(from, { replace: true });
+    } catch (e) {
+      toast.error("Login failed. Please try again.");
+    }
   }
   return (
     <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-slate-800 to-gray-950 flex items-center justify-center relative overflow-hidden">
@@ -75,7 +75,7 @@ const LoginPage = () => {
             <form
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-6"
-              aria-disabled={isPending}
+              aria-disabled={false}
             >
               {/* Add a debug button to force submit for testing */}
               {/* <button type="button" onClick={() => onSubmit(form.getValues())}>Debug Submit</button> */}
@@ -122,7 +122,7 @@ const LoginPage = () => {
                 type="submit"
                 className="w-full py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition-all duration-150 shadow-md"
               >
-                {isPending ? "Logging In..." : "Log In"}
+                Log In
               </Button>
               <div className="text-center mt-4">
                 <span className="text-slate-400">Don't have an account?</span>
