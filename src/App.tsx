@@ -3,11 +3,10 @@ import { routes } from "./routes";
 import ProtectedRoute from "./routes/protected-route";
 import LoginPage from "./features/auth/pages/LoginPage";
 import SignupPage from "./features/auth/pages/SignupPage";
-import { useAuth } from "./context/auth-context";
 
 function App() {
   return (
-    <div>
+    <div className="min-h-screen w-full bg-gradient-to-br from-gray-900 via-slate-800 to-gray-950">
       <Routes>
         {/* Public Routes */}
         <Route path="/sign-up" element={<SignupPage />} />
