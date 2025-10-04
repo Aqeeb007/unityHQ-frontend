@@ -4,6 +4,12 @@ const auth = {
   logout: "/auth/logout",
 };
 
+const workspaces = {
+  getWorkspaces: "/workspaces",
+  createWorkspace: "/workspaces",
+};
+
 export const URLs = {
   auth,
+  workspaces,
 };

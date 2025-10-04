@@ -44,6 +44,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 const LOCAL_KEY = {
   user: "auth_user",
   authed: "is_authenticated",
+  orgId: "org_id",
 } as const;
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -71,6 +72,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const persist = useCallback((nextUser: AuthUser, authed: boolean) => {
+    console.log(nextUser, authed);
     try {
       if (authed) {
         localStorage.setItem(LOCAL_KEY.authed, "true");
@@ -79,8 +81,12 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
       if (nextUser) {
         localStorage.setItem(LOCAL_KEY.user, JSON.stringify(nextUser));
+        // Set orgId in localStorage
+        let orgId = (nextUser as any).user.orgId;
+        localStorage.setItem(LOCAL_KEY.orgId, orgId);
       } else {
         localStorage.removeItem(LOCAL_KEY.user);
+        localStorage.removeItem(LOCAL_KEY.orgId);
       }
     } catch {
       // storage can fail in private mode; ignore
@@ -95,7 +101,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         (data as any)?.user ?? (data as any)?.data ?? null;
       setUser(nextUser);
       setIsAuthenticated(true);
+
       persist(nextUser, true);
+
       return nextUser;
     },
     [loginMutation, persist]

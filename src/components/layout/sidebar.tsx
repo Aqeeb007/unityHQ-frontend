@@ -6,6 +6,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  useGetWorkspaces,
+  type TWorkspaces,
+} from "@/features/workspaces/api/useGetWorkspaces";
 import { cn } from "@/lib/utils";
 import type { LucideIcon } from "lucide-react";
 import {
@@ -29,6 +33,8 @@ const sidebarRoutes: SidebarItem[] = [
 ];
 
 export const Sidebar = () => {
+  const { data: workspaces, isLoading: isLoadingWorkspaces } =
+    useGetWorkspaces();
   return (
     <aside className="h-[calc(100vh-68px)] w-72 rounded-2xl border border-white/10 bg-[#0F172B] text-slate-300 shadow-xl">
       <div className="flex items-center gap-2 p-4">
@@ -36,17 +42,26 @@ export const Sidebar = () => {
           <DropdownMenuTrigger className="flex justify-between w-full">
             <div className="flex items-center justify-center">
               <Workflow className="mr-2 size-5" />
-              Selected Workspace
+              {isLoadingWorkspaces
+                ? "Loading..."
+                : workspaces && workspaces.length > 0
+                ? workspaces[0].name
+                : "No Workspaces"}
             </div>
             <ChevronsUpDown className="ml-auto" />
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-64 bg-[#0F172B]">
             <DropdownMenuLabel>Workspaces</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>Profile</DropdownMenuItem>
-            <DropdownMenuItem>Billing</DropdownMenuItem>
-            <DropdownMenuItem>Team</DropdownMenuItem>
-            <DropdownMenuItem>Subscription</DropdownMenuItem>
+            {workspaces && workspaces.data.length > 0 ? (
+              workspaces.data.map((workspace: TWorkspaces) => (
+                <DropdownMenuItem key={workspace.id}>
+                  {workspace.name}
+                </DropdownMenuItem>
+              ))
+            ) : (
+              <DropdownMenuItem disabled>No Workspaces</DropdownMenuItem>
+            )}
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
