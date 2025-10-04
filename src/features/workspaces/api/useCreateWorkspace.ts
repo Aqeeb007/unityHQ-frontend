@@ -2,15 +2,14 @@ import { useMutation } from "@tanstack/react-query";
 import apiClient from "../../../api/client";
 import { URLs } from "@/api/urls";
 
-type SignupData = {
-  email: string;
-  password: string;
-  name?: string;
+type TCreateWorkspace = {
+  name: string;
+  description: string;
 };
 
 export const useCreateWorkspace = () => {
   const mutation = useMutation({
-    mutationFn: async (data: SignupData) => {
+    mutationFn: async (data: TCreateWorkspace) => {
       const response = await apiClient.post(
         URLs.workspaces.createWorkspace,
         data

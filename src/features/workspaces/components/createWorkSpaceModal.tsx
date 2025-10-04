@@ -1,12 +1,12 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogFooter,
-} from '@/components/ui/dialog';
+} from "@/components/ui/dialog";
 import {
   Form,
   FormControl,
@@ -14,29 +14,31 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Button } from '@/components/ui/button';
-import { useModalStore } from '../stores/modal-store';
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { useModalStore } from "../stores/modal-store";
 import {
   workspaceFormSchema,
   type WorkspaceFormValues,
-} from '../schemas/workspace-form-schema';
+} from "../schemas/workspace-form-schema";
+import { useCreateWorkspace } from "../api/useCreateWorkspace";
 
 export const CreateWorkSpaceModal = () => {
   const { isOpen, closeModal, resetFormData } = useModalStore();
+  const { mutate, isPending } = useCreateWorkspace();
 
   const form = useForm<WorkspaceFormValues>({
     resolver: zodResolver(workspaceFormSchema),
     defaultValues: {
-      name: '',
-      description: '',
+      name: "",
+      description: "",
     },
   });
 
   const onSubmit = (values: WorkspaceFormValues) => {
-    console.log('Form submitted:', values);
-    // TODO: Integrate with your workspace creation API
+    console.log("Form submitted:", values);
+    mutate(values);
     form.reset();
     resetFormData();
     closeModal();
@@ -50,11 +52,11 @@ export const CreateWorkSpaceModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-card to-card/50">
         <DialogHeader>
           <DialogTitle>Create New Workspace</DialogTitle>
         </DialogHeader>
-        
+
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -64,16 +66,13 @@ export const CreateWorkSpaceModal = () => {
                 <FormItem>
                   <FormLabel>Workspace Name</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="Enter workspace name..."
-                      {...field}
-                    />
+                    <Input placeholder="Enter workspace name..." {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            
+
             <FormField
               control={form.control}
               name="description"
@@ -90,20 +89,13 @@ export const CreateWorkSpaceModal = () => {
                 </FormItem>
               )}
             />
-            
+
             <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleClose}
-              >
+              <Button type="button" variant="outline" onClick={handleClose}>
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                disabled={form.formState.isSubmitting}
-              >
-                {form.formState.isSubmitting ? 'Creating...' : 'Create Workspace'}
+              <Button type="submit" disabled={isPending}>
+                {isPending ? "Creating..." : "Create Workspace"}
               </Button>
             </DialogFooter>
           </form>

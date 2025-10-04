@@ -14,10 +14,9 @@ const WorkspacePage = () => {
   const { openModal } = useModalStore();
 
   const filteredWorkspaces =
-    // workspaces.data?.filter((workspace: TWorkspaces) =>
-    //   workspace.name.toLowerCase().includes(searchTerm.toLowerCase())
-    // ) || [];
-    workspaces || [];
+    workspaces?.data?.filter((workspace: TWorkspaces) =>
+      workspace.name.toLowerCase().includes(searchTerm.toLowerCase())
+    ) || [];
 
   const handleSelectWorkspace = (workspace: TWorkspaces) => {
     // Navigate to workspace or handle selection
