@@ -5,10 +5,13 @@ import { Plus, Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
 import type { TWorkspaces } from "../api/useGetWorkspaces";
+import { useModalStore } from "@/features/workspaces/stores";
+import { CreateWorkSpaceModal } from "@/features/workspaces/components/createWorkSpaceModal";
 
 const WorkspacePage = () => {
   const { data: workspaces, isLoading, error } = useGetWorkspaces();
   const [searchTerm, setSearchTerm] = useState("");
+  const { openModal } = useModalStore();
 
   const filteredWorkspaces =
     // workspaces.data?.filter((workspace: TWorkspaces) =>
@@ -56,7 +59,7 @@ const WorkspacePage = () => {
             Manage and organize your projects and teams
           </p>
         </div>
-        <Button>
+        <Button onClick={openModal}>
           <Plus className="h-4 w-4 mr-2" />
           Create Workspace
         </Button>
@@ -138,6 +141,8 @@ const WorkspacePage = () => {
           workspaces
         </div>
       )}
+
+      <CreateWorkSpaceModal />
     </div>
   );
 };
