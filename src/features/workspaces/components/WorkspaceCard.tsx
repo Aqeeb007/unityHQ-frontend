@@ -1,12 +1,13 @@
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle
+  CardTitle,
 } from "@/components/ui/card";
-import { Calendar, MoreVertical, Users } from "lucide-react";
+import { Calendar, ExternalLink, MoreVertical } from "lucide-react";
 import type { TWorkspaces } from "../api/useGetWorkspaces";
 
 interface WorkspaceCardProps {
@@ -71,9 +72,38 @@ export const WorkspaceCard = ({
             <span>Created: {formatDate(workspace.createdAt)}</span>
           </div>
 
-          <div className="flex items-center text-sm text-muted-foreground">
-            <Users className="h-4 w-4 mr-2" />
-            <span>Users: {workspace.orgId}</span>
+          <div className="flex items-center">
+            <Button
+              variant="outline"
+              onClick={() =>
+                window.open(`/${workspace.id}/dashboard`, "_blank")
+              }
+            >
+              Open Workspace <ExternalLink />
+            </Button>
+            <div className="*:data-[slot=avatar]:ring-background flex -space-x-2 *:data-[slot=avatar]:ring-2 *:data-[slot=avatar]:grayscale ml-auto">
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/shadcn.png"
+                  alt="@shadcn"
+                />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/maxleiter.png"
+                  alt="@maxleiter"
+                />
+                <AvatarFallback>LR</AvatarFallback>
+              </Avatar>
+              <Avatar>
+                <AvatarImage
+                  src="https://github.com/evilrabbit.png"
+                  alt="@evilrabbit"
+                />
+                <AvatarFallback>ER</AvatarFallback>
+              </Avatar>
+            </div>
           </div>
         </div>
       </CardContent>
