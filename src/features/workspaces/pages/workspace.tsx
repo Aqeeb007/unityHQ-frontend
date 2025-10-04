@@ -11,9 +11,10 @@ const WorkspacePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
 
   const filteredWorkspaces =
-    workspaces.data?.filter((workspace: TWorkspaces) =>
-      workspace.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ) || [];
+    // workspaces.data?.filter((workspace: TWorkspaces) =>
+    //   workspace.name.toLowerCase().includes(searchTerm.toLowerCase())
+    // ) || [];
+    workspaces || [];
 
   const handleSelectWorkspace = (workspace: TWorkspaces) => {
     // Navigate to workspace or handle selection
@@ -32,7 +33,7 @@ const WorkspacePage = () => {
 
   if (error) {
     return (
-      <div className="container mx-auto p-6">
+      <div>
         <div className="text-center py-12">
           <h2 className="text-2xl font-semibold text-destructive mb-2">
             Error Loading Workspaces

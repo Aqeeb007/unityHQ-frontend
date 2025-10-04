@@ -5,6 +5,7 @@ import apiClient from "../../../api/client";
 export type TWorkspaces = {
   id: string;
   name: string;
+  description: string;
   orgId: string;
   createdAt: string;
   updatedAt: string;

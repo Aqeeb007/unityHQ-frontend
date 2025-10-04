@@ -20,7 +20,7 @@ export const Sidebar = () => {
 
   return (
     <aside className="h-[calc(100vh-68px)] w-72 rounded-2xl border border-white/10 bg-[#0F172B] text-slate-300 shadow-xl">
-      <nav className="px-2">
+      <nav className="px-2 py-10">
         <ul className="space-y-1">
           {sidebarRoutes.map((route) => {
             const Icon = route.icon;

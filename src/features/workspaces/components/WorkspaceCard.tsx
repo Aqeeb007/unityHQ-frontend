@@ -1,7 +1,13 @@
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
+} from "@/components/ui/card";
+import { Calendar, MoreVertical, Users } from "lucide-react";
 import type { TWorkspaces } from "../api/useGetWorkspaces";
-import { Calendar, Users, MoreVertical, ExternalLink } from "lucide-react";
 
 interface WorkspaceCardProps {
   workspace: TWorkspaces;
@@ -10,12 +16,17 @@ interface WorkspaceCardProps {
   onDelete?: (workspace: TWorkspaces) => void;
 }
 
-export const WorkspaceCard = ({ workspace, onSelect, onEdit, onDelete }: WorkspaceCardProps) => {
+export const WorkspaceCard = ({
+  workspace,
+  onSelect,
+  onEdit,
+  onDelete,
+}: WorkspaceCardProps) => {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
     });
   };
 
@@ -34,12 +45,13 @@ export const WorkspaceCard = ({ workspace, onSelect, onEdit, onDelete }: Workspa
                 {workspace.name}
               </CardTitle>
               <CardDescription className="text-xs">
-                ID: {workspace.id.slice(0, 8)}...
+                {workspace.description &&
+                  `${workspace.description.slice(0, 50)}...`}
               </CardDescription>
             </div>
           </div>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             size="icon"
             className="opacity-0 group-hover:opacity-100 transition-opacity h-8 w-8"
             onClick={(e) => {
@@ -55,62 +67,16 @@ export const WorkspaceCard = ({ workspace, onSelect, onEdit, onDelete }: Workspa
       <CardContent className="pt-0">
         <div className="space-y-3">
           <div className="flex items-center text-sm text-muted-foreground">
-            <Users className="h-4 w-4 mr-2" />
-            <span>Organization: {workspace.orgId}</span>
-          </div>
-          
-          <div className="flex items-center text-sm text-muted-foreground">
             <Calendar className="h-4 w-4 mr-2" />
             <span>Created: {formatDate(workspace.createdAt)}</span>
           </div>
 
-          {workspace.updatedAt !== workspace.createdAt && (
-            <div className="flex items-center text-sm text-muted-foreground">
-              <Calendar className="h-4 w-4 mr-2" />
-              <span>Updated: {formatDate(workspace.updatedAt)}</span>
-            </div>
-          )}
+          <div className="flex items-center text-sm text-muted-foreground">
+            <Users className="h-4 w-4 mr-2" />
+            <span>Users: {workspace.orgId}</span>
+          </div>
         </div>
       </CardContent>
-
-      <CardFooter className="pt-0">
-        <div className="flex items-center justify-between w-full">
-          <div className="flex space-x-2">
-            <Button
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onSelect?.(workspace);
-              }}
-              className="flex-1"
-            >
-              <ExternalLink className="h-4 w-4 mr-2" />
-              Open
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={(e) => {
-                e.stopPropagation();
-                onEdit?.(workspace);
-              }}
-            >
-              Edit
-            </Button>
-          </div>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              onDelete?.(workspace);
-            }}
-            className="text-destructive hover:text-destructive hover:bg-destructive/10"
-          >
-            Delete
-          </Button>
-        </div>
-      </CardFooter>
     </Card>
   );
 };
