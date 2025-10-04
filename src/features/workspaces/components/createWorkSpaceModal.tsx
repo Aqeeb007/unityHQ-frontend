@@ -52,7 +52,7 @@ export const CreateWorkSpaceModal = () => {
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="sm:max-w-[425px] bg-gradient-to-br from-card to-card/50">
+      <DialogContent className="sm:max-w-[425px] bg-[#0F172B]">
         <DialogHeader>
           <DialogTitle>Create New Workspace</DialogTitle>
         </DialogHeader>
