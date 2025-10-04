@@ -1,6 +1,7 @@
 // no public routes here; only protected routes
 
 import { RootLayout } from "@/components/layout";
+import WorkspacePage from "@/features/workspaces/pages/workspace";
 
 export const routes = [
   {
@@ -15,7 +16,7 @@ export const routes = [
     path: "/:workspaceId/workspaces",
     element: (
       <RootLayout>
-        <div>Workspaces</div>
+        <WorkspacePage />
       </RootLayout>
     ),
   },
