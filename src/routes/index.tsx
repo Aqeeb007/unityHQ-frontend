@@ -4,7 +4,7 @@ import { RootLayout } from "@/components/layout";
 
 export const routes = [
   {
-    path: "/dashboard",
+    path: "/:workspaceId/dashboard",
     element: (
       <RootLayout>
         <div>Dashboard</div>
@@ -12,7 +12,7 @@ export const routes = [
     ),
   },
   {
-    path: "/workspaces",
+    path: "/:workspaceId/workspaces",
     element: (
       <RootLayout>
         <div>Workspaces</div>
@@ -20,7 +20,7 @@ export const routes = [
     ),
   },
   {
-    path: "/settings",
+    path: "/:workspaceId/settings",
     element: (
       <RootLayout>
         <div>Settings</div>

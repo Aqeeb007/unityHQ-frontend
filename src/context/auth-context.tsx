@@ -23,8 +23,26 @@ type SignupInput = {
   name?: string;
 };
 
-// Replace this with a proper User type if your API returns one
-export type AuthUser = Record<string, unknown> | null;
+// Types for workspace
+type Workspace = {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  ownerId: string;
+};
+
+// User type based on API response
+export type AuthUser = {
+  id: string;
+  email: string;
+  name: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+  ownedWorkspaces: Workspace[];
+} | null;
 
 type AuthContextType = {
   user: AuthUser;
@@ -72,7 +90,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const persist = useCallback((nextUser: AuthUser, authed: boolean) => {
-    console.log(nextUser, authed);
     try {
       if (authed) {
         localStorage.setItem(LOCAL_KEY.authed, "true");
@@ -81,9 +98,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       }
       if (nextUser) {
         localStorage.setItem(LOCAL_KEY.user, JSON.stringify(nextUser));
-        // Set orgId in localStorage
-        let orgId = (nextUser as any).user.orgId;
-        localStorage.setItem(LOCAL_KEY.orgId, orgId);
+        // Set orgId in localStorage if needed (using first owned workspace)
+        if (nextUser.ownedWorkspaces && nextUser.ownedWorkspaces.length > 0) {
+          localStorage.setItem(LOCAL_KEY.orgId, nextUser.ownedWorkspaces[0].id);
+        }
       } else {
         localStorage.removeItem(LOCAL_KEY.user);
         localStorage.removeItem(LOCAL_KEY.orgId);
@@ -96,9 +114,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const login = useCallback(
     async (values: LoginInput) => {
       const data = await loginMutation.mutateAsync(values);
-      // Try to extract a user object if returned; otherwise store a boolean only
-      const nextUser: AuthUser =
-        (data as any)?.user ?? (data as any)?.data ?? null;
+      // Extract user from the nested response structure
+      const nextUser: AuthUser = (data as any)?.data?.user ?? null;
       setUser(nextUser);
       setIsAuthenticated(true);
 

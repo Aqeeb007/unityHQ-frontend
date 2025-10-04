@@ -45,10 +45,11 @@ const LoginPage = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
-      await login(values);
+      const data = await login(values);
       toast.success("Login successful!");
+      console.log("data:", data);
       form.reset();
-      navigate(from, { replace: true });
+      navigate(`/${data?.ownedWorkspaces[0]?.id}` + from, { replace: true });
     } catch (e) {
       toast.error("Login failed. Please try again.");
     }
